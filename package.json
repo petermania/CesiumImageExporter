@@ -1,0 +1,20 @@
+{
+  "name": "CesiumImageExporter",
+  "version": "0.0.1",
+  "author": "Scott Peterman",
+  "description": "Exports images of specified lat/lon from the cesium open source imager",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/petermania/CesiumImageExporter"
+  },
+  "dependencies": {
+
+  },
+  "licenses": [
+    {
+      "name": "MIT",
+      "url": "http://www.opensource.org/licenses/mit-license.php"
+    }
+  ]
+}
