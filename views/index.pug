@@ -1,0 +1,89 @@
+html
+  head
+    title= title
+    script(src="https://code.jquery.com/jquery-3.1.1.js")
+    link(href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css", rel="stylesheet")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js")
+    script(src="Cesium/Cesium.js")
+    style.
+      @import url(Cesium/Widgets/widgets.css);
+      html, body, #cesiumContainer {
+          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+        }
+  body
+    div.container-fluid
+      form.form-horizontal#images(action="/save-images", method="post")
+        div.form-group.row
+          div.col-4
+            div.input-group
+              span.input-group-addon Folder Name
+              input(type="text", class="form-control", value="", 'aria-describedby'="basic-addon1", name='folder')
+          div.col-2
+            div.input-group
+              span.input-group-addon Lat
+              input(type="text", class="form-control", value="", 'aria-describedby'="basic-addon1", name="lat")
+          div.col-2
+            div.input-group
+              span.input-group-addon Long
+              input(type="text", class="form-control", value="", 'aria-describedby'="basic-addon1", name="long")
+          div.col-4
+            div.btn-group(role="group" aria-label="Basic example")
+              button.btn.btn-larger.btn-warning(class="setClick" data-toggle="button" aria-pressed="false" autocomplete="off" ) Set Click
+              button.btn.btn-large.btn-success(type="submit") Save Images
+          input(type="hidden" name="data" value="1000")
+      form.form-horizontal#images(action="/change-settings", method="post")
+        div.form-group.row
+          div.col-4
+            div.input-group
+              span.input-group-addon Search Location
+              input(type="text", class="form-control", value="", 'aria-describedby'="basic-addon1", name='location')
+          div.col-1
+            button.btn.btn-large.btn-primary(type="submit") Search
+          div.col-2
+            div.dropdown
+              button.btn.btn-secondary.dropdown-toggle(type='button', id='dropdownMenuButton', 'data-toggle'="dropdown", 'aria-haspopup'="true", 'aria-expanded'="false")
+                span Zoom Level
+              div.dropdown-menu#zoom-level(aria-labelledby="dropdownMenuButton")
+                button.dropdown-item(value="0") 0
+                button.dropdown-item(value="1") 1
+                button.dropdown-item(value="2") 2
+                button.dropdown-item(value="3") 3
+                button.dropdown-item(value="4") 4
+                button.dropdown-item(value="5") 5
+                button.dropdown-item(value="6") 6
+                button.dropdown-item(value="7") 7
+                button.dropdown-item(value="8") 8
+                button.dropdown-item(value="9") 9
+          div.col-2
+            div.dropdown
+              button.btn.btn-secondary.dropdown-toggle(type='button', id='dropdownMenuButton', 'data-toggle'="dropdown", 'aria-haspopup'="true", 'aria-expanded'="false")
+                span Zoom Level
+              div.dropdown-menu#dropdown-response(aria-labelledby="dropdownMenuButton")
+                button.dropdown-item(value="0") 0
+                button.dropdown-item(value="1") 1
+                button.dropdown-item(value="2") 2
+                button.dropdown-item(value="3") 3
+                button.dropdown-item(value="4") 4
+                button.dropdown-item(value="5") 5
+                button.dropdown-item(value="6") 6
+                button.dropdown-item(value="7") 7
+                button.dropdown-item(value="8") 8
+                button.dropdown-item(value="9") 9
+          div.col-xs-2
+            div.input-group
+              span.input-group-addon Lat
+              input(type="text", class="form-control", value="", 'aria-describedby'="basic-addon1", name="lat")
+          div.col-xs-2
+            div.input-group
+              span.input-group-addon Long
+              input(type="text", class="form-control", value="", 'aria-describedby'="basic-addon1", name="long")
+          div.col-xs-2
+            button.btn.btn-larger.btn-warning(class="setClick") Set Click
+          div.col-xs-2
+            button.btn.btn-large.btn-success(type="submit") Save Images
+          input(type="hidden" name="data" value="1000")
+      div.col-xs-2
+        button.btn.btn-larger(class="getImage") Collect Images
+    div#cesiumContainer
+  script(src="/js/camera-control.js")
