@@ -2,6 +2,7 @@ html
   head
     title= title
     script(src="https://code.jquery.com/jquery-3.1.1.js")
+    script(src="https://cdn.socket.io/socket.io-1.4.5.js")
     link(href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css", rel="stylesheet")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js")
@@ -18,32 +19,27 @@ html
           div.col-4
             div.input-group
               span.input-group-addon Folder Name
-              input(type="text", class="form-control", value="", 'aria-describedby'="basic-addon1", name='folder')
+              input#folder(type="text", class="form-control", value="", 'aria-describedby'="basic-addon1", name='folder')
           div.col-2
             div.input-group
               span.input-group-addon Lat
-              input(type="text", class="form-control", value="", 'aria-describedby'="basic-addon1", name="lat")
+              input#lat(type="text", class="form-control", value="", 'aria-describedby'="basic-addon1", name="lat")
           div.col-2
             div.input-group
               span.input-group-addon Long
-              input(type="text", class="form-control", value="", 'aria-describedby'="basic-addon1", name="long")
+              input#long(type="text", class="form-control", value="", 'aria-describedby'="basic-addon1", name="long")
           div.col-4
             div.btn-group(role="group" aria-label="Basic example")
               button.btn.btn-larger.btn-warning(class="setClick" data-toggle="button" aria-pressed="false" autocomplete="off" ) Set Click
-              button.btn.btn-large.btn-success(type="submit") Save Images
+              button.btn.btn-large.btn-success(class="getImage") Save Images
+            button.btn.btn-large.btn-success(id="sendImages" type="submit" style={display:'none'}) Send Images
           input(type="hidden" name="data" value="1000")
-      form.form-horizontal#images(action="/change-settings", method="post")
+      form.form-horizontal#images(action="/change-zoom", method="get")
         div.form-group.row
-          div.col-4
-            div.input-group
-              span.input-group-addon Search Location
-              input(type="text", class="form-control", value="", 'aria-describedby'="basic-addon1", name='location')
           div.col-1
-            button.btn.btn-large.btn-primary(type="submit") Search
-          div.col-2
             div.dropdown
               button.btn.btn-secondary.dropdown-toggle(type='button', id='dropdownMenuButton', 'data-toggle'="dropdown", 'aria-haspopup'="true", 'aria-expanded'="false")
-                span Zoom Level
+                span Zoom
               div.dropdown-menu#zoom-level(aria-labelledby="dropdownMenuButton")
                 button.dropdown-item(value="0") 0
                 button.dropdown-item(value="1") 1
@@ -55,35 +51,42 @@ html
                 button.dropdown-item(value="7") 7
                 button.dropdown-item(value="8") 8
                 button.dropdown-item(value="9") 9
+                button.dropdown-item(value="10") 10
+                button.dropdown-item(value="11") 11
+                button.dropdown-item(value="12") 12
+                button.dropdown-item(value="13") 13
+                button.dropdown-item(value="14") 14
+                button.dropdown-item(value="15") 15
+                button.dropdown-item(value="16") 16
+                button.dropdown-item(value="17") 17
+                button.dropdown-item(value="18") 18
+                button.dropdown-item(value="19") 19
           div.col-2
+            div.input-group
+              span.input-group-addon#zoomLabel
+              input#zoomLevel(type="hidden", class="form-control", value=0 'aria-describedby'="basic-addon1", name="zoom_level")
+              input#zoomValue(type="text", class="form-control", value=0, 'aria-describedby'="basic-addon1", name="zoom_value")
+          div.col-2
+            button.btn.btn-larger.btn-warning(class="saveZoom") Save Zoom
+      form.form-horizontal#images(action="/search-location", method="post")
+        div.form-group.row
+          div.col-4
+            div.input-group
+              span.input-group-addon Search Location
+              input.search_location(type="text", class="form-control", value="", 'aria-describedby'="basic-addon1", name='location')
+          div.col-1
+            button.btn.btn-large.btn-primary.search(type="submit") Search
+          div.col-1
             div.dropdown
-              button.btn.btn-secondary.dropdown-toggle(type='button', id='dropdownMenuButton', 'data-toggle'="dropdown", 'aria-haspopup'="true", 'aria-expanded'="false")
-                span Zoom Level
-              div.dropdown-menu#dropdown-response(aria-labelledby="dropdownMenuButton")
-                button.dropdown-item(value="0") 0
-                button.dropdown-item(value="1") 1
-                button.dropdown-item(value="2") 2
-                button.dropdown-item(value="3") 3
-                button.dropdown-item(value="4") 4
-                button.dropdown-item(value="5") 5
-                button.dropdown-item(value="6") 6
-                button.dropdown-item(value="7") 7
-                button.dropdown-item(value="8") 8
-                button.dropdown-item(value="9") 9
-          div.col-xs-2
-            div.input-group
-              span.input-group-addon Lat
-              input(type="text", class="form-control", value="", 'aria-describedby'="basic-addon1", name="lat")
-          div.col-xs-2
-            div.input-group
-              span.input-group-addon Long
-              input(type="text", class="form-control", value="", 'aria-describedby'="basic-addon1", name="long")
-          div.col-xs-2
-            button.btn.btn-larger.btn-warning(class="setClick") Set Click
-          div.col-xs-2
-            button.btn.btn-large.btn-success(type="submit") Save Images
-          input(type="hidden" name="data" value="1000")
-      div.col-xs-2
-        button.btn.btn-larger(class="getImage") Collect Images
+              button.btn.btn-secondary.dropdown-toggle(type='button', id='locationsDropdown', 'data-toggle'="dropdown", 'aria-haspopup'="true", 'aria-expanded'="false")
+                span Past Locations
+              div.dropdown-menu#locations(aria-labelledby="dropdownMenuButton")
+                for location in locations
+                  button.dropdown-item('lat'=location.lat, 'long'=location.long) #{location.folder}
+      //- div.col-xs-2
+      //-   button.btn.btn-larger(class="getImage") Collect Images
     div#cesiumContainer
+  script(type='text/javascript').
+    var zoom=!{zoom}
+    var key='#{key}'
   script(src="/js/camera-control.js")
